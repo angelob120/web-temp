@@ -582,7 +582,7 @@ function generateTemplate8() {
                 <!-- Hero Section -->
                 <section class="hero">
                     <div class="hero-container">
-                        <div class="hero-badge">Professional (${serviceName} Experts</div>
+                        <div class="hero-badge">Professional ${serviceName} Experts</div>
                         <h1>Transform Your Home with <span class="highlight">Expert ${serviceName}</span> Solutions</h1>
                         <p>We deliver exceptional ${serviceName} services that enhance your property's value, functionality, and aesthetic appeal. Our experienced professionals use cutting-edge techniques and premium materials.</p>
                         
