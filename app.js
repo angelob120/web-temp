@@ -127,12 +127,15 @@ function updatePreview() {
         styleTag.textContent = '.why-image::before{content:none!important;}';
         doc.head.appendChild(styleTag);
 
+
         const selectors = [
             '.experience-image','.image-placeholder',
             '.projects-image','.contact-image',
             '.services-image','.why-image',
-            '.image-container'
+            '.image-container','.service-image'  // <-- This is the line I added
+
         ];
+
         selectors.forEach(sel => {
             doc.querySelectorAll(sel).forEach((el, idx) => {
                 const src = currentClient.images[idx];

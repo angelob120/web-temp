@@ -3,6 +3,7 @@ function generateTemplate8() {
     const companyName = currentClient.name || '${companyName}';
     const serviceName = currentClient.service || '${serviceName}';
     const phoneNumber = currentClient.phone || '${phoneNumber}';
+    const gmbImage = currentClient.gmbImage || '';
     
     return `
         <!-- PASTE THE ENTIRE HTML CONTENT FROM t2.html HERE -->
@@ -650,8 +651,9 @@ function generateTemplate8() {
                     </div>
                     
                     <div class="service-image">
-                        GMB IMAGE
+                        ${gmbImage ? `<img src="${gmbImage}" alt="GMB Image" style="width:100%; height:100%; object-fit:cover;">` : 'GMB IMAGE'}
                     </div>
+
                 </div>
             </section>
 
