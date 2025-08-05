@@ -1002,61 +1002,35 @@ function updatePreview() {
     elements.previewContainer.appendChild(iframe);
 }
 
+// FAST INSTANT DOWNLOAD FUNCTION
 async function downloadScreenshot() {
     try {
         const iframe = elements.previewContainer.querySelector('iframe');
-        if (!iframe) throw new Error('Preview not loaded yet');
+        if (!iframe) {
+            showNotification('❌ Preview not loaded yet', 'warning');
+            return;
+        }
 
         const win = iframe.contentWindow;
         const doc = iframe.contentDocument || win.document;
         const target = doc.body;
 
+        // Apply template-specific fixes quickly
         if (selectedTemplate === 10) {
             const cleanup = doc.createElement('style');
-            cleanup.textContent = `
-                .stat-number,
-                .section-badge,
-                .feature-icon,
-                .hero::before,
-                .image-container::before,
-                .recent-work::after,
-                .work-image::before {
-                    background: none !important;
-                    box-shadow: none !important;
-                }
-                .hero::before,
-                .service-section::before {
-                    display: none !important;
-                }
-                .stat-number,
-                .feature-text,
-                input,
-                select,
-                textarea,
-                .highlight {
-                    -webkit-text-fill-color: inherit !important;
-                    background-clip: initial !important;
-                    color: inherit !important;
-                }
-                .form-title {
-                    color: white !important;
-                }
-            `;
+            cleanup.textContent = `.stat-number,.section-badge,.feature-icon,.hero::before,.image-container::before,.recent-work::after,.work-image::before{background:none!important;box-shadow:none!important}.hero::before,.service-section::before{display:none!important}.stat-number,.feature-text,input,select,textarea,.highlight{-webkit-text-fill-color:inherit!important;background-clip:initial!important;color:inherit!important}.form-title{color:white!important}`;
             doc.head.appendChild(cleanup);
         }
 
         if (selectedTemplate === 4) {
             const bgFix = doc.createElement('style');
-            bgFix.textContent = `
-                body {
-                    background-color: #ffffff !important;
-                }
-            `;
+            bgFix.textContent = `body{background-color:#ffffff!important}`;
             doc.head.appendChild(bgFix);
         }
 
         win.scrollTo(0, 0);
 
+        // Generate canvas with speed-optimized settings
         const canvas = await html2canvas(target, {
             width: target.scrollWidth,
             height: target.scrollHeight,
@@ -1064,21 +1038,32 @@ async function downloadScreenshot() {
             allowTaint: true,
             scrollX: 0,
             scrollY: 0,
-            backgroundColor: null
+            backgroundColor: null,
+            scale: 1,
+            logging: false,
+            removeContainer: true
         });
 
+        // INSTANT DOWNLOAD - No compression, fixed quality for speed
         canvas.toBlob(blob => {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${currentClient.name || 'website'}-full-preview.png`;
+            a.download = `${currentClient.name || 'website'}-preview.jpg`;
+            a.style.display = 'none';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }, 'image/png');
+            
+            // Clean up immediately
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+            
+            const sizeInMB = (blob.size / (1024 * 1024)).toFixed(2);
+            showNotification(`✅ Downloaded! (${sizeInMB}MB)`, 'success');
+        }, 'image/jpeg', 0.85); // Fixed 85% quality for optimal balance
+
     } catch (err) {
         console.error('Screenshot failed:', err);
-        alert('Screenshot download failed. Please try again.');
+        showNotification('❌ Download failed. Please try again.', 'warning');
     }
 }
