@@ -3,6 +3,11 @@ function generateTemplate5() {
     const companyName = currentClient.name || '${companyName}';
     const serviceName = currentClient.service || '${serviceName}';
     const phoneNumber = currentClient.phone || '${phoneNumber}';
+    const heroBackground = currentClient.backgroundImage || 'https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/688a7635a2af291018c3da77.png';
+    
+    // Check if using custom background (not default)
+    const isCustomBackground = currentClient.backgroundImage !== null;
+    const overlayOpacity = isCustomBackground ? '0.7' : '0.5'; // Stronger overlay for custom images
     
     return `
         <!-- PASTE THE ENTIRE HTML CONTENT FROM orangecons.html HERE -->
@@ -58,29 +63,49 @@ function generateTemplate5() {
             font-weight: 600;
             }
 
-            /* Hero */
+            /* Hero with Smart Overlay Protection */
             .hero {
             display: grid;
             grid-template-columns: 1fr 350px;
             min-height: 350px;
-            background: url('https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/688a7635a2af291018c3da77.png') center/cover no-repeat;
+            background: url('${heroBackground}') center/cover no-repeat;
             position: relative;
+            ${isCustomBackground ? 'backdrop-filter: blur(1px);' : ''}
             }
+            
             .hero::before {
             content: '';
-            position: absolute; inset: 0;
-            background: rgba(0,0,0,0.5);
+            position: absolute; 
+            inset: 0;
+            background: rgba(0,0,0,${overlayOpacity});
+            z-index: 1;
             }
+            
+            /* Additional protection layer for custom backgrounds */
+            ${isCustomBackground ? `
+            .hero::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: rgba(0,0,0,0.2);
+                backdrop-filter: blur(2px);
+                z-index: 2;
+            }
+            ` : ''}
+            
             .hero-content {
             position: relative;
             padding: 60px 40px;
             color: var(--white);
+            z-index: 3;
+            ${isCustomBackground ? 'text-shadow: 2px 2px 4px rgba(0,0,0,0.8);' : ''}
             }
             .hero-content h1 {
             font-size: 3rem;
             margin-bottom: 20px;
             display: inline-block;
             position: relative;
+            ${isCustomBackground ? 'text-shadow: 2px 2px 6px rgba(0,0,0,0.9);' : ''}
             }
             .hero-content h1::before {
             content: '';
@@ -89,11 +114,13 @@ function generateTemplate5() {
             transform: translateY(-50%);
             width: 5px; height: 60%;
             background: var(--yellow);
+            ${isCustomBackground ? 'box-shadow: 2px 2px 4px rgba(0,0,0,0.5);' : ''}
             }
             .hero-content p {
             max-width: 500px;
             line-height: 1.6;
             margin-bottom: 30px;
+            ${isCustomBackground ? 'text-shadow: 1px 1px 3px rgba(0,0,0,0.8);' : ''}
             }
             .hero-content .btn-primary {
             background: var(--yellow);
@@ -108,21 +135,26 @@ function generateTemplate5() {
             background: var(--yellow);
             padding: 40px 30px;
             color: var(--dark);
+            z-index: 3;
             }
+
             .hero-services h2 {
             font-size: 1.5rem;
             font-weight: 700;
             margin-top: 0;
             }
+
             .services-list {
             list-style: none;
             margin-top: 20px;
             }
+
             .services-list li {
             display: flex;
             align-items: flex-start;
             margin-bottom: 20px;
             }
+
             .services-list .icon {
             width: 40px;
             height: 40px;
@@ -132,6 +164,7 @@ function generateTemplate5() {
             align-items: center;
             justify-content: center;
             }
+            
             .services-list h3 {
             margin: 0 0 5px;
             font-size: 1rem;
@@ -260,6 +293,31 @@ function generateTemplate5() {
             background: var(--yellow);
             margin: 10px auto 0;
             }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .hero {
+                    grid-template-columns: 1fr;
+                    min-height: auto;
+                }
+                
+                .hero-services {
+                }
+                
+                .quote-section {
+                    flex-direction: column;
+                    gap: 20px;
+                    text-align: center;
+                }
+                
+                .projects {
+                    flex-direction: column;
+                }
+                
+                .projects-image {
+                    min-height: 200px;
+                }
+            }
         </style>
         </head>
         <body>
@@ -287,7 +345,7 @@ function generateTemplate5() {
                 <div class="icon">🏗️</div>
                 <div>
                     <h3>Building Construction</h3>
-                    <p>From framing to finishing, we offer reliable building solutions tailored to your project’s needs.</p>
+                    <p>From framing to finishing, we offer reliable building solutions tailored to your project's needs.</p>
                 </div>
                 </li>
                 <li>

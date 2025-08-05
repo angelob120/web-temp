@@ -1,11 +1,17 @@
-// Template 4 - HVAC Service
+// Template 4 - HVAC Service with Hero Background Functionality
 function generateTemplate4() {
     const companyName = currentClient.name || '${companyName}';
     const serviceName = currentClient.service || '${serviceName}';
     const phoneNumber = currentClient.phone || '${phoneNumber}';
+    const heroBackground = currentClient.backgroundImage || 'https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/688a5e00e7e7692b58fd2cb7.png';
+    
+    // Check if using custom background (not default)
+    const isCustomBackground = currentClient.backgroundImage !== null;
+    const overlayEffect = isCustomBackground 
+        ? 'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))' // Stronger overlay for custom images
+        : 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4))'; // Original overlay for default
     
     return `
-        <!-- PASTE THE ENTIRE HTML CONTENT FROM landscapers.html HERE -->
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -42,7 +48,6 @@ function generateTemplate4() {
                     color: white;
                     font-size: 18px;
                     font-weight: bold;
-                    text-transform: uppercase;
                     letter-spacing: 1px;
                 }
 
@@ -77,10 +82,13 @@ function generateTemplate4() {
                     transform: translateY(-2px);
                 }
 
-                /* Hero Section */
+                /* Hero Section with Smart Background System */
                 .hero {
                     height: 60vh;
-                    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/688a5e00e7e7692b58fd2cb7.png');
+                    position: relative;
+                    background: 
+                        ${overlayEffect},
+                        url('${heroBackground}');
                     background-size: cover;
                     background-position: center;
                     display: flex;
@@ -90,6 +98,31 @@ function generateTemplate4() {
                     text-align: center;
                     color: white;
                     padding: 0 50px;
+                    ${isCustomBackground ? 'backdrop-filter: blur(1px);' : ''}
+                }
+                
+                /* Additional protection layer for custom backgrounds */
+                ${isCustomBackground ? `
+                .hero::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.2);
+                    backdrop-filter: blur(2px);
+                    z-index: 1;
+                }
+                ` : ''}
+
+                .hero-content {
+                    position: relative;
+                    z-index: 2;
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
                 }
 
                 .hero h1 {
@@ -98,6 +131,8 @@ function generateTemplate4() {
                     margin-bottom: 30px;
                     line-height: 1.1;
                     max-width: 800px;
+                    position: relative;
+                    z-index: 3;
                 }
 
                 .hero p {
@@ -105,12 +140,16 @@ function generateTemplate4() {
                     margin-bottom: 40px;
                     max-width: 600px;
                     opacity: 0.9;
+                    position: relative;
+                    z-index: 3;
                 }
 
                 .hero-buttons {
                     display: flex;
                     gap: 20px;
                     margin-bottom: 80px;
+                    position: relative;
+                    z-index: 3;
                 }
 
                 .btn-primary {
@@ -145,7 +184,7 @@ function generateTemplate4() {
 
                 /* Stats Section */
                 .stats {
-                    background: white;
+                    background: ${isCustomBackground ? 'rgba(255,255,255,0.98)' : 'white'};
                     padding: 30px;
                     border-radius: 15px;
                     display: grid;
@@ -154,6 +193,9 @@ function generateTemplate4() {
                     max-width: 800px;
                     margin: 0 auto;
                     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                    position: relative;
+                    z-index: 3;
+                    ${isCustomBackground ? 'backdrop-filter: blur(10px);' : ''}
                 }
 
                 .stat-item {
@@ -368,28 +410,30 @@ function generateTemplate4() {
 
             <!-- Hero Section -->
             <section class="hero">
-                <h1>Gardens of Distinction</h1>
-                <p>Transform your outdoor spaces into a masterpiece with our expert landscaping services. From irrigation solutions to comprehensive maintenance, we create stunning landscapes that enhance your property.</p>
-                <div class="hero-buttons">
-                    <a href="#" class="btn-primary">Get Started</a>
-                    <a href="#" class="btn-secondary">${phoneNumber}</a>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-number">15+</div>
-                        <div class="stat-label">Years Experience</div>
+                <div class="hero-content">
+                    <h1>Gardens of Distinction</h1>
+                    <p>Transform your outdoor spaces into a masterpiece with our expert landscaping services. From irrigation solutions to comprehensive maintenance, we create stunning landscapes that enhance your property.</p>
+                    <div class="hero-buttons">
+                        <a href="#" class="btn-primary">Get Started</a>
+                        <a href="#" class="btn-secondary">${phoneNumber}</a>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number">10K+</div>
-                        <div class="stat-label">Projects</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">5K+</div>
-                        <div class="stat-label">Satisfied Clients</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">87+</div>
-                        <div class="stat-label">Local Team Members</div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-number">15+</div>
+                            <div class="stat-label">Years Experience</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">10K+</div>
+                            <div class="stat-label">Projects</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">5K+</div>
+                            <div class="stat-label">Satisfied Clients</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">87+</div>
+                            <div class="stat-label">Local Team Members</div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -474,6 +518,5 @@ function generateTemplate4() {
             </section>
         </body>
         </html>
-        <!-- Replace static text with variables -->
     `;
 }

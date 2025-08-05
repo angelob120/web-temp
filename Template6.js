@@ -2,6 +2,8 @@ function generateTemplate6() {
     const companyName = currentClient.name || '${companyName}';
     const serviceName = currentClient.service || '${serviceName}';
     const phoneNumber = currentClient.phone || '${phoneNumber}';
+    const companyNameUpper = companyName.toUpperCase();
+    const serviceNameUpper = serviceName.toUpperCase();
     
     return `
         <!-- PASTE THE ENTIRE HTML CONTENT FROM persurewashing.html HERE -->
@@ -566,8 +568,8 @@ function generateTemplate6() {
             <!-- Hero Section -->
             <section class="hero">
                 <div class="hero-content">
-                    <div class="hero-badge">WELCOME TO ${companyName}</div>
-                    <h1>TOP RATED EXTERIOR HOME ${serviceName}</h1>
+                    <div class="hero-badge">WELCOME TO ${companyNameUpper}</div>
+                    <h1>TOP RATED EXTERIOR HOME ${serviceNameUpper}</h1>
                     <p>We have over 200+ Reviews Between Google, Facebook, Angi and Nice Job.</p>
                     <a href="#quote" class="cta-button">${phoneNumber}</a>
                 </div>
@@ -581,7 +583,7 @@ function generateTemplate6() {
                     </div>
                     <div class="services-content">
                         <h3>${companyName}</h3>
-                        <h2>Serving Professional Washing Services</h2>
+                        <h2>Serving Professional ${serviceName} Services</h2>
                         <p>We specialize in delivering clean, dependable ${serviceName} services designed to enhance your home’s curb appeal and value. Every project is handled with precision, care, and a focus on customer satisfaction.</p>
                         
                         <ul class="feature-list">

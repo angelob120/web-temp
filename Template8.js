@@ -1,12 +1,18 @@
-// Template 6 - Pressure Washing
+// Template 8 - Pressure Washing with Hero Background Functionality
 function generateTemplate8() {
     const companyName = currentClient.name || '${companyName}';
     const serviceName = currentClient.service || '${serviceName}';
     const phoneNumber = currentClient.phone || '${phoneNumber}';
     const gmbImage = currentClient.gmbImage || '';
+    const heroBackground = currentClient.backgroundImage || 'https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/688a67fd3c5f729425ed6ae7.png';
+    
+    // Check if using custom background (not default)
+    const isCustomBackground = currentClient.backgroundImage !== null;
+    const overlayEffect = isCustomBackground 
+        ? 'linear-gradient(rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.7))' // Stronger overlay for custom images
+        : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; // Original gradient for default
     
     return `
-        <!-- PASTE THE ENTIRE HTML CONTENT FROM t2.html HERE -->
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -27,14 +33,20 @@ function generateTemplate8() {
                     background-color: #ffffff;
                 }
 
-                /* Header & Navigation */
+                /* Header & Navigation with Smart Background */
                 .header {
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: 
+                        ${overlayEffect}${isCustomBackground ? `,
+                        url('${heroBackground}')
+                        center/cover no-repeat` : ''};
                     padding: 0;
                     position: relative;
                     overflow: hidden;
+                    ${isCustomBackground ? 'backdrop-filter: blur(1px);' : ''}
                 }
 
+                /* Grain pattern overlay - only for default background */
+                ${!isCustomBackground ? `
                 .header::before {
                     content: '';
                     position: absolute;
@@ -45,6 +57,22 @@ function generateTemplate8() {
                     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
                     z-index: 1;
                 }
+                ` : ''}
+
+                /* Additional protection layer for custom backgrounds */
+                ${isCustomBackground ? `
+                .header::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(102, 126, 234, 0.2);
+                    backdrop-filter: blur(2px);
+                    z-index: 1;
+                }
+                ` : ''}
 
                 .nav-container {
                     position: relative;
@@ -62,12 +90,16 @@ function generateTemplate8() {
                     font-size: 24px;
                     font-weight: 800;
                     letter-spacing: -0.5px;
+                    z-index: 3;
+                    position: relative;
                 }
 
                 .nav-menu {
                     display: flex;
                     list-style: none;
                     gap: 40px;
+                    z-index: 3;
+                    position: relative;
                 }
 
                 .nav-menu a {
@@ -113,6 +145,8 @@ function generateTemplate8() {
                     font-weight: 600;
                     font-size: 14px;
                     transition: all 0.3s ease;
+                    z-index: 3;
+                    position: relative;
                 }
 
                 .phone-btn:hover {
@@ -134,6 +168,8 @@ function generateTemplate8() {
                 .hero-container {
                     max-width: 1400px;
                     margin: 0 auto;
+                    z-index: 3;
+                    position: relative;
                 }
 
                 .hero-badge {
@@ -206,6 +242,7 @@ function generateTemplate8() {
                     font-weight: 600;
                     font-size: 16px;
                     transition: all 0.3s ease;
+                    ${isCustomBackground ? 'backdrop-filter: blur(15px); background: rgba(255,255,255,0.15);' : ''}
                 }
 
                 .btn-secondary:hover {
@@ -576,7 +613,7 @@ function generateTemplate8() {
                         <li><a href="#services">Services</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
-                    <a href="tel:(PHONE)" class="phone-btn">${phoneNumber}</a>
+                    <a href="tel:${phoneNumber}" class="phone-btn">${phoneNumber}</a>
                 </nav>
 
                 <!-- Hero Section -->
@@ -587,7 +624,7 @@ function generateTemplate8() {
                         <p>We deliver exceptional ${serviceName} services that enhance your property's value, functionality, and aesthetic appeal. Our experienced professionals use cutting-edge techniques and premium materials.</p>
                         
                         <div class="hero-buttons">
-                            <a href="tel:PHONE" class="btn-primary">${phoneNumber}</a>
+                            <a href="tel:${phoneNumber}" class="btn-primary">${phoneNumber}</a>
                             <a href="#services" class="btn-secondary">View Services</a>
                         </div>
 
@@ -647,7 +684,7 @@ function generateTemplate8() {
                             </li>
                         </ul>
                         
-                        <a href="tel:(PHONE)" class="service-cta">${phoneNumber}</a>
+                        <a href="tel:${phoneNumber}" class="service-cta">${phoneNumber}</a>
                     </div>
                     
                     <div class="service-image">
@@ -699,6 +736,5 @@ function generateTemplate8() {
             </section>
         </body>
         </html>
-        <!-- Replace static text with variables -->
     `;
 }

@@ -149,7 +149,7 @@ function generateTemplate7() {
                 <img src="https://via.placeholder.com/48" alt="Jhon Smith">
                 <div class="testimonial-content">
                     <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">Great Service From Dedicated Team. They Are Very Experienced In Fixing All The HVAC/R Problems That Plague Homes.</p>
+                    <p class="testimonial-text">Great Service From Dedicated Team. They Are Very Experienced In Fixing All The ${serviceName} That Plague Homes.</p>
                     <div class="author">Jhon Smith, Idaho</div>
                 </div>
                 </div>

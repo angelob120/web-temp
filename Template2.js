@@ -2,6 +2,13 @@ function generateTemplate2() {
     const companyName = currentClient.name || '${companyName}';
     const serviceName = currentClient.service || '${serviceName}';
     const phoneNumber = currentClient.phone || '${phoneNumber}';
+    const heroBackground = currentClient.backgroundImage || 'https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/68899d9c8934ce50e00262ea.png';
+    
+    // Check if using custom background (not default)
+    const isCustomBackground = currentClient.backgroundImage !== null;
+    const overlayEffect = isCustomBackground 
+        ? 'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))' // Stronger overlay for custom images
+        : 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4))'; // Lighter overlay for default
     
     return `
         <!-- PASTE THE ENTIRE HTML CONTENT FROM ConstructionCompany.html HERE -->
@@ -73,9 +80,9 @@ function generateTemplate2() {
                     background-color: #c0ca33;
                 }
 
-                /* Hero Section */
+                /* Hero Section with Smart Overlay Protection */
                 .hero {
-                    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/68899d9c8934ce50e00262ea.png');
+                    background: ${overlayEffect}, url('${heroBackground}');
                     background-size: cover;
                     background-position: center;
                     background-repeat: no-repeat;
@@ -85,8 +92,23 @@ function generateTemplate2() {
                     align-items: center;
                     position: relative;
                     padding: 2rem;
+                    ${isCustomBackground ? 'backdrop-filter: blur(1px);' : ''}
                 }
 
+                /* Additional protection layer for custom backgrounds */
+                ${isCustomBackground ? `
+                .hero::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.2);
+                    backdrop-filter: blur(2px);
+                    z-index: 1;
+                }
+                ` : `
                 /* Fallback if image doesn't load */
                 .hero::before {
                     content: '';
@@ -98,6 +120,7 @@ function generateTemplate2() {
                     background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
                     z-index: -1;
                 }
+                `}
 
                 .hero-content {
                     max-width: 1200px;
@@ -107,6 +130,8 @@ function generateTemplate2() {
                     grid-template-columns: 2fr 1fr;
                     gap: 4rem;
                     align-items: center;
+                    position: relative;
+                    z-index: 2;
                 }
 
                 .hero-left {
@@ -143,6 +168,10 @@ function generateTemplate2() {
                     opacity: 0.9;
                     margin-bottom: 2rem;
                     max-width: 500px;
+                }
+
+                .hero .phone-btn {
+
                 }
 
                 .hero-right {

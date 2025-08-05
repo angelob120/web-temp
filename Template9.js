@@ -1,11 +1,18 @@
-// Template 9 - Service Blue
+// Template 9 - Service Blue with Hero Background Functionality
 function generateTemplate9() {
     const companyName = currentClient.name || '${companyName}';
     const serviceName = currentClient.service || '${serviceName}';
     const phoneNumber = currentClient.phone || '${phoneNumber}';
+    const serviceNameUpper = serviceName.toUpperCase();
+    const heroBackground = currentClient.backgroundImage || 'https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/688a67fd3c5f729425ed6ae7.png';
+    
+    // Check if using custom background (not default)
+    const isCustomBackground = currentClient.backgroundImage !== null;
+    const overlayEffect = isCustomBackground 
+        ? 'linear-gradient(rgba(30, 64, 175, 0.8), rgba(59, 130, 246, 0.7), rgba(96, 165, 250, 0.6))' // Stronger overlay for custom images
+        : 'linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%)'; // Original gradient for default
     
     return `
-        <!-- PASTE THE ENTIRE HTML CONTENT FROM t3.html HERE -->
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -49,7 +56,6 @@ function generateTemplate9() {
                     font-size: 24px;
                     font-weight: 800;
                     color: #1e40af;
-                    text-transform: uppercase;
                     letter-spacing: 1px;
                 }
 
@@ -85,15 +91,21 @@ function generateTemplate9() {
                     transform: translateY(-2px);
                 }
 
-                /* Hero Section */
+                /* Hero Section with Smart Background */
                 .hero {
-                    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+                    position: relative;
                     color: white;
                     padding: 100px 0 80px;
-                    position: relative;
                     overflow: hidden;
+                    background: 
+                        ${overlayEffect}${isCustomBackground ? `,
+                        url('${heroBackground}')
+                        center/cover no-repeat` : ''};
+                    ${isCustomBackground ? 'backdrop-filter: blur(1px);' : ''}
                 }
 
+                /* Grid pattern overlay - only for default background */
+                ${!isCustomBackground ? `
                 .hero::before {
                     content: '';
                     position: absolute;
@@ -103,7 +115,24 @@ function generateTemplate9() {
                     bottom: 0;
                     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
                     opacity: 0.3;
+                    z-index: 1;
                 }
+                ` : ''}
+
+                /* Additional protection layer for custom backgrounds */
+                ${isCustomBackground ? `
+                .hero::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(30, 64, 175, 0.2);
+                    backdrop-filter: blur(2px);
+                    z-index: 1;
+                }
+                ` : ''}
 
                 .hero-container {
                     max-width: 1200px;
@@ -120,6 +149,7 @@ function generateTemplate9() {
                 .hero-content {
                     max-width: 700px;
                     width: 100%;
+                    z-index: 3;
                 }
 
                 .hero-badge {
@@ -140,7 +170,6 @@ function generateTemplate9() {
                     font-weight: 700;
                     line-height: 1.1;
                     margin-bottom: 40px;
-                    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                 }
 
                 .hero-highlight {
@@ -233,6 +262,8 @@ function generateTemplate9() {
                     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
                     backdrop-filter: blur(10px);
                     border: 1px solid rgba(255, 255, 255, 0.2);
+                    z-index: 3;
+                    position: relative;
                 }
 
                 .hero-form h3 {
@@ -672,7 +703,7 @@ function generateTemplate9() {
                             <li><a href="#contact">Contact</a></li>
                         </ul>
                     </nav>
-                    <a href="tel:PHONE" class="phone-header">${phoneNumber}</a>
+                    <a href="tel:${phoneNumber}" class="phone-header">${phoneNumber}</a>
                 </div>
             </header>
 
@@ -680,11 +711,11 @@ function generateTemplate9() {
             <section class="hero">
                 <div class="hero-container">
                     <div class="hero-content">
-                        <div class="hero-badge">PROFESSIONAL ${serviceName} EXPERTS</div>
+                        <div class="hero-badge">PROFESSIONAL ${serviceNameUpper} EXPERTS</div>
                         <h1>Trusted <span class="hero-highlight">${serviceName}</span><br>Services You Can Count On</h1>
                         <p>We provide top-quality ${serviceName} solutions with professional expertise, reliable service, and competitive pricing. Your satisfaction is our priority.</p>
                         <div class="hero-buttons">
-                            <a href="tel:PHONE" class="btn-primary">
+                            <a href="tel:${phoneNumber}" class="btn-primary">
                                 ${phoneNumber} →
                             </a>
                             <a href="#services" class="btn-secondary">Our Services</a>
@@ -776,7 +807,7 @@ function generateTemplate9() {
                             </div>
                         </div>
 
-                        <a href="tel:PHONE" class="services-cta">
+                        <a href="tel:${phoneNumber}" class="services-cta">
                             ${phoneNumber} →
                         </a>
                     </div>
@@ -826,6 +857,5 @@ function generateTemplate9() {
             </section>
         </body>
         </html>
-        <!-- Replace static text with variables -->
     `;
 }

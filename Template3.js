@@ -3,6 +3,14 @@ function generateTemplate3() {
     const companyName = currentClient.name || '${companyName}';
     const serviceName = currentClient.service || '${serviceName}';
     const phoneNumber = currentClient.phone || '${phoneNumber}';
+    const heroBackground = currentClient.backgroundImage || 'https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/688a6450c6431c3b96242abc.png';
+    const serviceNameUpper = serviceName.toUpperCase();
+
+    // Check if using custom background (not default)
+    const isCustomBackground = currentClient.backgroundImage !== null;
+    const overlayEffect = isCustomBackground 
+        ? 'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))' // Stronger overlay for custom images
+        : 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4))'; // Lighter overlay for default
     
     return `
         <!-- PASTE THE ENTIRE HTML CONTENT FROM hvac.html HERE -->
@@ -115,16 +123,32 @@ function generateTemplate3() {
                     background: #1e40af;
                 }
 
-                /* Hero Section */
+                /* Hero Section with Smart Overlay Protection */
                 .hero {
-                    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/688a6450c6431c3b96242abc.png');
+                    background: ${overlayEffect}, url('${heroBackground}');
                     background-size: cover;
                     background-position: center;
                     min-height: 50vh;
                     display: flex;
                     align-items: center;
                     position: relative;
+                    ${isCustomBackground ? 'backdrop-filter: blur(1px);' : ''}
                 }
+
+                /* Additional protection layer for custom backgrounds */
+                ${isCustomBackground ? `
+                .hero::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.2);
+                    backdrop-filter: blur(2px);
+                    z-index: 1;
+                }
+                ` : ''}
 
                 .hero .container {
                     max-width: 1200px;
@@ -134,6 +158,8 @@ function generateTemplate3() {
                     grid-template-columns: 1fr 400px;
                     gap: 60px;
                     align-items: center;
+                    position: relative;
+                    z-index: 2;
                 }
 
                 .hero-content {
@@ -223,6 +249,8 @@ function generateTemplate3() {
                     padding: 30px;
                     border-radius: 15px;
                     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                    position: relative;
+                    z-index: 3;
                 }
 
                 .service-form h3 {
@@ -452,7 +480,7 @@ function generateTemplate3() {
             <section class="hero">
                 <div class="container">
                     <div class="hero-content">
-                        <div class="hero-badge">TRUSTED ${serviceName} PROFESSIONALS SINCE 2010</div>
+                        <div class="hero-badge">TRUSTED ${serviceNameUpper} PROFESSIONALS SINCE 2010</div>
                         <h1>Some Jobs Should Only Ever Be Tackled By A Professional, And ${serviceName} Is One Of Them.</h1>
                         
                         <div class="testimonial">

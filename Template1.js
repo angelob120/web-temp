@@ -2,6 +2,13 @@ function generateTemplate1() {
     const companyName = currentClient.name || '${companyName}';
     const serviceName = currentClient.service || '${serviceName}';
     const phoneNumber = currentClient.phone || '${phoneNumber}';
+    const heroBackground = currentClient.backgroundImage || 'https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/688a67fd3c5f729425ed6ae7.png';
+    
+    // Check if using custom background (not default)
+    const isCustomBackground = currentClient.backgroundImage !== null;
+    const overlayEffect = isCustomBackground 
+        ? 'linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7))' // Stronger overlay for custom images
+        : 'linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5))'; // Lighter overlay for default
     
     return `
         <style>
@@ -78,31 +85,50 @@ function generateTemplate1() {
                 background: #e55a2b;
             }
 
-            /* Hero tweaks (shorter) */
+            /* Hero with Smart Overlay Protection */
             .hero {
                 position: relative;
-                padding-top: 5%;  /* reduced top padding */
+                padding-top: 5%;
                 background:
-                    linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),
-                    url('https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/688a67fd3c5f729425ed6ae7.png')
+                    ${overlayEffect},
+                    url('${heroBackground}')
                     center/cover no-repeat;
-                min-height: 45vh; /* shorter hero */
+                min-height: 45vh;
+                ${isCustomBackground ? 'backdrop-filter: blur(1px);' : ''}
             }
+            
+            /* Additional protection layer for custom backgrounds */
+            ${isCustomBackground ? `
+            .hero::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.2);
+                backdrop-filter: blur(2px);
+                z-index: 1;
+            }
+            ` : ''}
+            
             .hero-container {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 align-items: center;
-                gap: 2rem;        /* added gap */
-                padding: 2rem 0;  /* vertical padding */
+                gap: 2rem;
+                padding: 2rem 0;
                 position: relative;
                 height: 100%;
+                z-index: 2;
             }
             .hero-content {
                 max-width: 600px;
-                z-index: 2;
+                z-index: 3;
+                ${isCustomBackground ? 'text-shadow: 2px 2px 4px rgba(0,0,0,0.8);' : ''}
             }
             .hero h1 {
-                font-size: 2.8rem; /* smaller headline */
+                font-size: 2.8rem;
                 font-weight: bold;
                 margin-bottom: 1rem;
                 line-height: 1.1;
@@ -111,8 +137,8 @@ function generateTemplate1() {
                 color: #FF6B35;
             }
             .hero p {
-                font-size: 1rem;       /* slightly smaller */
-                margin-bottom: 1.5rem; /* reduced bottom margin */
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
                 opacity: 0.9;
             }
             .hero-buttons {
@@ -158,7 +184,7 @@ function generateTemplate1() {
                 justify-content: flex-start;
                 gap: 3rem;
                 margin-top: 1rem;
-                z-index: 2;
+                z-index: 3;
                 position: relative;
             }
             .stats-inline .stat-item {
@@ -185,7 +211,7 @@ function generateTemplate1() {
             /* Quality Box moved to bottom - now as a bar */
             .quality-bottom {
                 position: absolute;
-                bottom: 2rem;      /* pulled up */
+                bottom: 2rem;
                 left: 50%;
                 transform: translateX(-50%);
                 background: rgba(255, 107, 53, 0.95);
@@ -193,7 +219,7 @@ function generateTemplate1() {
                 border-radius: 15px;
                 width: 90%;
                 max-width: 1000px;
-                z-index: 2;
+                z-index: 3;
                 backdrop-filter: blur(10px);
             }
             .quality-items {
@@ -405,7 +431,7 @@ function generateTemplate1() {
                     <div class="experience-text">
                         <h2>We deliver high-quality You Can Trust</h2>
                         <p>Our team is made up of skilled experts dedicated to delivering top-tier ${serviceName} services. We combine industry knowledge, reliable workmanship, and attention to detail to ensure every job is done right.</p>
-                        <p>Whether it’s a routine service or a complex project, we follow the latest safety standards and best practices to give you results that last. From start to finish, your satisfaction is our priority.</p>
+                        <p>Whether it's a routine service or a complex project, we follow the latest safety standards and best practices to give you results that last. From start to finish, your satisfaction is our priority.</p>
                         <div class="experience-buttons">
                             <a href="#services" class="btn-primary">Our Services ⊕</a>
                             <a href="#project" class="btn-secondary">View Project</a>

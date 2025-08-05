@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Generator for Outreach</title>
+    <title>Website Generator for Outreach - Enhanced with Image Collection</title>
     <style>
         /* Website Generator Styles */
         * {
@@ -87,55 +87,6 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .search-input {
-            position: relative;
-        }
-
-        .search-input input {
-            padding-left: 2.5rem;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #9ca3af;
-        }
-
-        .client-list {
-            max-height: 10rem;
-            overflow-y: auto;
-            margin-top: 1rem;
-        }
-
-        .client-item {
-            padding: 0.75rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .client-item:hover {
-            background-color: #f9fafb;
-        }
-
-        .client-name {
-            font-weight: 500;
-        }
-
-        .client-phone {
-            font-size: 0.875rem;
-            color: #6b7280;
-        }
-
-        .client-meta {
-            font-size: 0.75rem;
-            color: #9ca3af;
-        }
-
         .file-upload {
             width: 100%;
             padding: 0.75rem;
@@ -154,16 +105,218 @@
             display: none;
         }
 
-        .preview-image {
-            width: 4rem;
-            height: 4rem;
-            object-fit: contain;
-            margin-top: 0.5rem;
+        /* Background Controls */
+        .background-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .background-preview {
+            width: 100%;
+            height: 100px;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            position: relative;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .background-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .background-preview.has-custom {
+            border-color: #3b82f6;
+        }
+
+        .background-buttons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-start;
+        }
+
+        /* Enhanced Image Collection Styles */
+        .image-collection-section {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            background: #f8fafc;
+        }
+
+        .paste-area {
+            min-height: 120px;
+            border: 3px dashed #38bdf8;
+            border-radius: 0.75rem;
+            background: #f0f9ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .paste-area:hover {
+            border-color: #0ea5e9;
+            background-color: #e0f2fe;
+            transform: scale(1.01);
+        }
+
+        .paste-area.dragover {
+            border-color: #0284c7;
+            background-color: #bae6fd;
+            transform: scale(1.02);
+        }
+
+        .paste-instructions {
+            text-align: center;
+            color: #0284c7;
+        }
+
+        .paste-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .paste-main {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .paste-sub {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .hidden-input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            width: 1px;
+            height: 1px;
+        }
+
+        /* Background paste area specific styles */
+        .background-paste-area {
+            min-height: 80px;
+            border: 3px dashed #f59e0b;
+            border-radius: 0.75rem;
+            background: #fef3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .background-paste-area:hover {
+            border-color: #d97706;
+            background-color: #fde68a;
+            transform: scale(1.01);
+        }
+
+        .background-paste-area.dragover {
+            border-color: #92400e;
+            background-color: #f59e0b;
+            transform: scale(1.02);
+        }
+
+        .background-paste-area .paste-instructions {
+            color: #92400e;
+        }
+
+        /* Custom Context Menu */
+        .context-menu {
+            position: fixed;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10000;
+            padding: 4px 0;
+            min-width: 120px;
+            display: none;
+        }
+
+        .context-menu-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .context-menu-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .context-menu-item:active {
+            background-color: #e5e7eb;
+        }
+
+        .collection-controls {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .small-btn {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-popup {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-popup:hover {
+            background: #5a67d8;
+        }
+
+        .btn-clear {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #dc2626;
+        }
+
+        .btn-download-all {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn-download-all:hover {
+            background: #16a34a;
         }
 
         .image-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 0.5rem;
             margin-top: 0.75rem;
         }
@@ -171,14 +324,84 @@
         .image-item {
             position: relative;
             width: 100%;
-            height: 4rem;
+            height: 100px;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .image-item:hover {
+            border-color: #3b82f6;
+            transform: scale(1.05);
         }
 
         .image-item img {
             width: 100%;
-            height: 100%;
+            height: 70px;
             object-fit: cover;
-            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+
+        .image-info {
+            padding: 0.25rem;
+            font-size: 0.625rem;
+            height: 30px;
+            overflow: hidden;
+        }
+
+        .image-name {
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 0.125rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .image-actions {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            display: flex;
+            gap: 2px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .image-item:hover .image-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            padding: 2px 4px;
+            font-size: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .action-btn.download {
+            background: #22c55e;
+            color: white;
+        }
+
+        .action-btn.copy {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .action-btn.remove {
+            background: #ef4444;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
         }
 
         .remove-btn {
@@ -202,36 +425,6 @@
 
         .image-item:hover .remove-btn {
             opacity: 1;
-        }
-
-        .theme-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .theme-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 0.75rem;
-            background: #f3f4f6;
-            border: none;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .theme-btn:hover {
-            background: #e5e7eb;
-        }
-
-        .color-input {
-            width: 100%;
-            height: 2.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            cursor: pointer;
         }
 
         .template-grid {
@@ -285,15 +478,6 @@
             gap: 0.5rem;
         }
 
-        .btn-green {
-            background: #059669;
-            color: white;
-        }
-
-        .btn-green:hover {
-            background: #047857;
-        }
-
         .btn-blue {
             background: #2563eb;
             color: white;
@@ -310,47 +494,96 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-    .preview-container {
-    width: 1000px;
-    height: 1500px;
-    overflow: auto;
-    }
+        .preview-container {
+            width: 1000px;
+            height: 70%;
+            overflow: auto;
+        }
 
-    /* if your preview is an iframe: */
-    .preview-container iframe {
-    width: 1400px !important;
-    min-width: 1400px !important;
-    max-width: none !important;
-    transform: none    /* disable any zoom/scale */
-    }
+        .preview-container iframe {
+            width: 1400px !important;
+            min-width: 1400px !important;
+            max-width: none !important;
+            transform: none;
+        }
 
-    /* —or— if it’s a div wrapper, e.g. <div class="preview-content">…</div> */
-    .preview-container .preview-content {
-    width: 1400px;
-    min-width: 1400px;
-    }
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 10000;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
 
+        .notification.show {
+            transform: translateX(0);
+        }
 
+        .notification.warning {
+            background: #f59e0b;
+        }
 
-        /* Template Base Styles */
-        .template {
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            position: relative;
-            overflow: hidden;
+            background: rgba(0,0,0,0.9);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            text-align: center;
+        }
+
+        .modal img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .modal-info {
+            color: white;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        .modal-close {
+            color: #ccc;
+            margin-top: 8px;
+            font-size: 14px;
         }
 
         @media (max-width: 768px) {
             .main-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .collection-controls {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Website Generator for Outreach</h1>
+        <h1 class="title">Website Generator for Outreach - Enhanced with Image Collection</h1>
         
         <div class="main-grid">
             <!-- Controls Panel -->
@@ -358,66 +591,133 @@
 
                 <!-- Company Info -->
                 <div class="panel">
-                    <h3>Company Information</h3>
+                    <h3>📋 Company Information</h3>
                     <div class="input-group">
-                        <input type="text" id="companyName" class="input" placeholder="Company Name" />
+                        <input type="text" id="companyName" class="input" placeholder="Company Name (paste with Ctrl+V)" />
                     </div>
                     <div class="input-group">
-                        <input type="text" id="serviceType" class="input" placeholder="Service/Industry" />
+                        <input type="text" id="serviceType" class="input" placeholder="Service/Industry (paste with Ctrl+V)" />
                     </div>
                     <div class="input-group">
-                        <input type="tel" id="phoneNumber" class="input" placeholder="Phone Number" />
+                        <input type="tel" id="phoneNumber" class="input" placeholder="Phone Number (paste with Ctrl+V)" />
                     </div>
                 </div>
 
-                <!-- File Uploads -->
+                <!-- Image Collection Tool -->
                 <div class="panel">
-                    <h3>Assets</h3>
-                    <!-- 
-                    <div class="input-group">
-                        <label>Logo</label>
-                        <div class="file-upload" onclick="document.getElementById('logoUpload').click()">
-                            <input type="file" id="logoUpload" accept="image/*" />
-                            📁 Upload Logo
+                    <h3>🖼️ Image Collection Tool</h3>
+                    <div class="image-collection-section">
+                        <!-- Website Collection -->
+                        <div class="collection-controls">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span style="font-weight: 600; color: #374151;">🌐 Website Image Collection</span>
+                            </div>
+                            <input type="url" id="websiteUrl" class="input" style="width: 100%; margin-bottom: 0.5rem;" placeholder="Enter website URL for image collection (paste URLs here with Ctrl+V)">
+                            <div style="display: flex; gap: 0.5rem; justify-content: flex-start;">
+                                <!-- Opens website directly in new window - NO IFRAME (some websites block iframe embedding) -->
+                                <button class="small-btn btn-popup" onclick="openImageCollectionPopup()">🪟 Open Website</button>
+                            </div>
                         </div>
-                        <div id="logoPreview"></div>
+                        
+                        <!-- Pexels Collection -->
+                        <div class="collection-controls" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span style="font-weight: 600; color: #374151;">🏞️ Pexels Stock Photos</span>
+                            </div>
+                            <input type="text" id="pexelsSearch" class="input" style="width: 100%; margin-bottom: 0.5rem;" placeholder="Search for images or paste keywords (e.g., 'landscaping', 'construction', 'plumbing')">
+                            <div style="display: flex; gap: 0.5rem; justify-content: flex-start;">
+                                <!-- Opens Pexels popup with NO SANDBOX restrictions for full right-click functionality -->
+                                <button class="small-btn btn-popup" onclick="openPexelsImageCollection()">🔍 Search Pexels</button>
+                                <button class="small-btn btn-popup" onclick="openPexelsImageCollection('browse')" style="background: #059669;">🏞️ Browse Popular</button>
+                            </div>
+                        </div>
+
+                        <!-- Google Images Collection -->
+                        <div class="collection-controls" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span style="font-weight: 600; color: #374151;">🔍 Google Images Search</span>
+                            </div>
+                            <input type="text" id="googleImagesSearch" class="input" style="width: 100%; margin-bottom: 0.5rem;" placeholder="Search Google Images or paste keywords (e.g., 'modern kitchen', 'office space', 'construction tools')">
+                            <div style="display: flex; gap: 0.5rem; justify-content: flex-start;">
+                                <!-- Opens Google Images directly in new window - NO IFRAME (Google blocks iframe embedding) -->
+                                <button class="small-btn btn-popup" onclick="openGoogleImagesCollection()" style="background: #4285f4;">🔍 Search Google Images</button>
+                                <button class="small-btn btn-popup" onclick="openGoogleImagesCollection('tools')" style="background: #34a853;">🛠️ Usage Rights</button>
+                            </div>
+                        </div>
                     </div>
-                    -->
+                </div>
+
+                <!-- Additional Images with Copy/Paste -->
+                <div class="panel">
+                    <h3>📷 Additional Images</h3>
+                    
+                    <!-- Hero Background Controls -->
                     <div class="input-group">
-                        <label>Images</label>
+                        <label>Hero Background</label>
+                        <div class="background-controls">
+                            <div class="background-preview" id="backgroundPreview">
+                                <img id="backgroundPreviewImg" src="" alt="Current Background" style="display: none;">
+                                <div id="backgroundPreviewDefault">Default Background</div>
+                            </div>
+                            
+                            <!-- Background Paste Area -->
+                            <div id="backgroundPasteArea" class="background-paste-area"
+                                 onclick="focusBackgroundPasteArea()"
+                                 ondragover="handleBackgroundDragOver(event)"
+                                 ondrop="handleBackgroundDrop(event)">
+                                <div class="paste-instructions">
+                                    <div class="paste-icon">🖼️</div>
+                                    <div class="paste-main" style="font-size: 14px;">Click here then Ctrl+V to paste background</div>
+                                    <div class="paste-sub" style="font-size: 11px;">Or drag & drop background image directly</div>
+                                </div>
+                                <textarea id="hiddenBackgroundPasteInput" class="hidden-input" placeholder="Paste background image here"></textarea>
+                            </div>
+                            
+                            <div class="background-buttons">
+                                <button class="small-btn btn-popup" onclick="document.getElementById('backgroundUpload').click()">🖼️ Upload Background</button>
+                                <button class="small-btn btn-clear" onclick="resetToDefaultBackground()">🔄 Use Default</button>
+                                <input type="file" id="backgroundUpload" accept="image/*" style="display: none;" onchange="handleBackgroundUpload(event)" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- File Upload -->
+                    <div class="input-group">
+                        <label>Upload GMB Images</label>
                         <div class="file-upload" onclick="document.getElementById('imageUpload').click()">
                             <input type="file" id="imageUpload" accept="image/*" multiple />
                             📷 Upload Images
                         </div>
-                        <div id="imageGrid" class="image-grid"></div>
                     </div>
-                </div>
 
-                <!-- Theme & Colors -->
-                 <!--
-                <div class="panel">
-                    <h3>🎨 Theme & Colors</h3>
-                    <div class="theme-toggle">
-                        <span>Theme</span>
-                        <button id="themeToggle" class="theme-btn">
-                            <span id="themeIcon">☀️</span>
-                            <span id="themeText">Light</span>
-                        </button>
-                    </div>
+                    <!-- Copy/Paste Area for GMB Images -->
                     <div class="input-group">
-                        <label>Primary Color</label>
-                        <input type="color" id="primaryColor" class="color-input" value="#22c55e" />
+                        <label>Copy & Paste GMB Images</label>
+                        <div id="pasteArea" class="paste-area" 
+                             onclick="focusPasteArea()"
+                             ondragover="handleDragOver(event)"
+                             ondrop="handleDrop(event)">
+                            <div class="paste-instructions">
+                                <div class="paste-icon">📷</div>
+                                <div class="paste-main">Click here then Ctrl+V to paste</div>
+                                <div class="paste-sub">Or drag & drop images directly</div>
+                            </div>
+                            <textarea id="hiddenPasteInput" class="hidden-input" placeholder="Paste images here"></textarea>
+                        </div>
+
+                        <div class="collection-controls">
+                            <button class="small-btn btn-clear" onclick="clearAllImages()">🗑️ Clear All</button>
+                            <button class="small-btn btn-download-all" onclick="downloadAllImages()">💾 Download All</button>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label>Secondary Color</label>
-                        <input type="color" id="secondaryColor" class="color-input" value="#059669" />
-                    </div>
+
+                    <!-- Images Grid -->
+                    <div id="imageGrid" class="image-grid"></div>
                 </div>
-                -->
 
                 <!-- Templates -->
                 <div class="panel">
-                    <h3>Templates</h3>
+                    <h3>🎨 Templates</h3>
                     <div class="template-grid">
                         <button class="template-btn active" data-template="1">
                             <div class="template-name">Template 1</div>
@@ -477,6 +777,13 @@
                     <!-- Template will be rendered here -->
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Custom Context Menu -->
+    <div id="contextMenu" class="context-menu">
+        <div class="context-menu-item" onclick="pasteFromContextMenu()">
+            📋 Paste Image
         </div>
     </div>
 

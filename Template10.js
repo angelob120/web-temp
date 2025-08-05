@@ -3,7 +3,13 @@ function generateTemplate10() {
     const companyName = currentClient.name || '${companyName}';
     const serviceName = currentClient.service || '${serviceName}';
     const phoneNumber = currentClient.phone || '${phoneNumber}';
-    
+    const serviceNameUpper = serviceName.toUpperCase();
+    const heroBackground = currentClient.backgroundImage || 'https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/688a67fd3c5f729425ed6ae7.png';
+    const isCustomBackground = currentClient.backgroundImage !== null;
+    const overlayEffect = isCustomBackground 
+        ? 'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))' // Stronger overlay for custom images
+        : 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5))'; // Lighter overlay for default
+
     return `
         <!-- PASTE THE ENTIRE HTML CONTENT FROM t4.html HERE -->
         <!DOCTYPE html>
@@ -52,7 +58,6 @@ function generateTemplate10() {
                     font-size: 1.8rem;
                     font-weight: 800;
                     color: #fff;
-                    text-transform: uppercase;
                     letter-spacing: 2px;
                 }
 
@@ -105,11 +110,12 @@ function generateTemplate10() {
                     box-shadow: 0 8px 25px rgba(229, 62, 62, 0.4);
                 }
 
-                /* Hero Section */
+                /* Hero Section with Smart Overlay Protection */
                 .hero {
                     height: calc(60vh);
-                    background: linear-gradient(135deg, rgba(15, 15, 15, 0.8), rgba(229, 62, 62, 0.7)), 
-                                url('https://storage.googleapis.com/msgsndr/4LY6N1zgk0vBmUYSulXh/media/688a67fd3c5f729425ed6ae7.png');
+                    background:
+                        ${overlayEffect},
+                        url('${heroBackground}');
                     background-size: cover;
                     background-position: center;
                     background-attachment: fixed;
@@ -117,6 +123,7 @@ function generateTemplate10() {
                     align-items: center;
                     position: relative;
                     overflow: hidden;
+                    ${isCustomBackground ? 'backdrop-filter: blur(1px);' : ''}
                 }
 
                 .hero::before {
@@ -649,7 +656,7 @@ function generateTemplate10() {
                         <li><a href="#services">Services</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
-                    <a href="tel:PHONE" class="phone-btn">${phoneNumber}</a>
+                    <a href="tel:${phoneNumber}" class="phone-btn">${phoneNumber}</a>
                 </nav>
             </header>
 
@@ -657,11 +664,11 @@ function generateTemplate10() {
             <section class="hero">
                 <div class="hero-container">
                     <div class="hero-content">
-                        <div class="hero-badge">TRUSTED LOCAL EXPERTS</div>
+                        <div class="hero-badge">TRUSTED LOCAL EXPERTS FOR ${serviceNameUpper}</div>
                         <h1>Professional <span class="highlight">${serviceName}</span> Solutions You Can Trust</h1>
                         <p>Experience exceptional service quality with our certified professionals. We deliver reliable, efficient, and affordable solutions for all your home service needs.</p>
                         <div class="hero-buttons">
-                            <a href="tel:PHONE" class="btn-primary">${phoneNumber}</a>
+                            <a href="tel:${phoneNumber}" class="btn-primary">${phoneNumber}</a>
                             <a href="#services" class="btn-secondary">Our Services</a>
                         </div>
                         
@@ -745,7 +752,7 @@ function generateTemplate10() {
                             </div>
                         </div>
                         
-                        <a href="tel:PHONE" class="btn-primary">Call Now for Free Estimate</a>
+                        <a href="tel:${phoneNumber}" class="btn-primary">Call Now for Free Estimate</a>
                     </div>
                     <div class="service-image">
                         <div class="image-container">
@@ -791,7 +798,5 @@ function generateTemplate10() {
             </section>
         </body>
         </html>
-
-        <!-- Replace static text with variables -->
     `;
 }
