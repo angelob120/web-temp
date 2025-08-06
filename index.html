@@ -427,6 +427,13 @@
             opacity: 1;
         }
 
+        .template-grid-horizontal {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.75rem;
+            width: 100%;
+        }
+
         .template-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -578,6 +585,11 @@
             .collection-controls {
                 flex-direction: column;
             }
+            
+            .template-grid-horizontal {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -605,120 +617,139 @@
 
                 <!-- Image Collection Tool -->
                 <div class="panel">
-                    <h3>🖼️ Image Collection Tool</h3>
-                    <div class="image-collection-section">
-                        <!-- Website Collection -->
-                        <div class="collection-controls">
-                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                <span style="font-weight: 600; color: #374151;">🌐 Website Image Collection</span>
-                            </div>
-                            <input type="url" id="websiteUrl" class="input" style="width: 100%; margin-bottom: 0.5rem;" placeholder="Enter website URL for image collection (paste URLs here with Ctrl+V)">
-                            <div style="display: flex; gap: 0.5rem; justify-content: flex-start;">
-                                <!-- Opens website directly in new window - NO IFRAME (some websites block iframe embedding) -->
-                                <button class="small-btn btn-popup" onclick="openImageCollectionPopup()">🪟 Open Website</button>
-                            </div>
-                        </div>
+                    <h3 style="text-align: center;">🖼️ Image Collection & Management</h3>
+                    
+                    <!-- Two-column layout for Image Collection and Additional Images -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;">
                         
-                        <!-- Pexels Collection -->
-                        <div class="collection-controls" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
-                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                <span style="font-weight: 600; color: #374151;">🏞️ Pexels Stock Photos</span>
-                            </div>
-                            <input type="text" id="pexelsSearch" class="input" style="width: 100%; margin-bottom: 0.5rem;" placeholder="Search for images or paste keywords (e.g., 'landscaping', 'construction', 'plumbing')">
-                            <div style="display: flex; gap: 0.5rem; justify-content: flex-start;">
-                                <!-- Opens Pexels popup with NO SANDBOX restrictions for full right-click functionality -->
-                                <button class="small-btn btn-popup" onclick="openPexelsImageCollection()">🔍 Search Pexels</button>
-                                <button class="small-btn btn-popup" onclick="openPexelsImageCollection('browse')" style="background: #059669;">🏞️ Browse Popular</button>
-                            </div>
-                        </div>
-
-                        <!-- Google Images Collection -->
-                        <div class="collection-controls" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
-                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                <span style="font-weight: 600; color: #374151;">🔍 Google Images Search</span>
-                            </div>
-                            <input type="text" id="googleImagesSearch" class="input" style="width: 100%; margin-bottom: 0.5rem;" placeholder="Search Google Images or paste keywords (e.g., 'modern kitchen', 'office space', 'construction tools')">
-                            <div style="display: flex; gap: 0.5rem; justify-content: flex-start;">
-                                <!-- Opens Google Images directly in new window - NO IFRAME (Google blocks iframe embedding) -->
-                                <button class="small-btn btn-popup" onclick="openGoogleImagesCollection()" style="background: #4285f4;">🔍 Search Google Images</button>
-                                <button class="small-btn btn-popup" onclick="openGoogleImagesCollection('tools')" style="background: #34a853;">🛠️ Usage Rights</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Additional Images with Copy/Paste -->
-                <div class="panel">
-                    <h3>📷 Additional Images</h3>
-                    
-                    <!-- Hero Background Controls -->
-                    <div class="input-group">
-                        <label>Hero Background</label>
-                        <div class="background-controls">
-                            <div class="background-preview" id="backgroundPreview">
-                                <img id="backgroundPreviewImg" src="" alt="Current Background" style="display: none;">
-                                <div id="backgroundPreviewDefault">Default Background</div>
-                            </div>
+                        <!-- Left Column: Image Collection Tool -->
+                        <div>
+                            <h4 style="margin-bottom: 1rem; color: #374151; font-size: 1rem; font-weight: 600;">🖼️ Image Collection Tool</h4>
                             
-                            <!-- Background Paste Area -->
-                            <div id="backgroundPasteArea" class="background-paste-area"
-                                 onclick="focusBackgroundPasteArea()"
-                                 ondragover="handleBackgroundDragOver(event)"
-                                 ondrop="handleBackgroundDrop(event)">
-                                <div class="paste-instructions">
-                                    <div class="paste-icon">🖼️</div>
-                                    <div class="paste-main" style="font-size: 14px;">Click here then Ctrl+V to paste background</div>
-                                    <div class="paste-sub" style="font-size: 11px;">Or drag & drop background image directly</div>
+                            <!-- Website Collection -->
+                            <div class="collection-controls">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                    <span style="font-weight: 600; color: #374151;">🌐 Website Image Collection</span>
                                 </div>
-                                <textarea id="hiddenBackgroundPasteInput" class="hidden-input" placeholder="Paste background image here"></textarea>
+                                <input type="url" id="websiteUrl" class="input" style="width: 100%; margin-bottom: 0.5rem;" placeholder="Enter website URL for image collection (paste URLs here with Ctrl+V)">
+                                <div style="display: flex; gap: 0.5rem; justify-content: flex-start;">
+                                    <!-- Opens website directly in new window - NO IFRAME needed -->
+                                    <button class="small-btn btn-popup" onclick="openImageCollectionPopup()">🪟 Open Website</button>
+                                </div>
                             </div>
                             
-                            <div class="background-buttons">
-                                <button class="small-btn btn-popup" onclick="document.getElementById('backgroundUpload').click()">🖼️ Upload Background</button>
-                                <button class="small-btn btn-clear" onclick="resetToDefaultBackground()">🔄 Use Default</button>
-                                <input type="file" id="backgroundUpload" accept="image/*" style="display: none;" onchange="handleBackgroundUpload(event)" />
+                            <!-- Pexels Collection -->
+                            <div class="collection-controls" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                    <span style="font-weight: 600; color: #374151;">🏞️ Pexels Stock Photos</span>
+                                </div>
+                                <input type="text" id="pexelsSearch" class="input" style="width: 100%; margin-bottom: 0.5rem;" placeholder="Search for images or paste keywords (e.g., 'landscaping', 'construction', 'plumbing')">
+                                <div style="display: flex; gap: 0.5rem; justify-content: flex-start;">
+                                    <!-- Opens Pexels popup with NO SANDBOX restrictions for full right-click functionality -->
+                                    <button class="small-btn btn-popup" onclick="openPexelsImageCollection()">🔍 Search Pexels</button>
+                                    <button class="small-btn btn-popup" onclick="openPexelsImageCollection('browse')" style="background: #059669;">🏞️ Browse Popular</button>
+                                </div>
+                            </div>
+
+                            <!-- Google Images Collection -->
+                            <div class="collection-controls" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                    <span style="font-weight: 600; color: #374151;">🔍 Google Images Search</span>
+                                </div>
+                                <input type="text" id="googleImagesSearch" class="input" style="width: 100%; margin-bottom: 0.5rem;" placeholder="Search Google Images or paste keywords (e.g., 'modern kitchen', 'office space', 'construction tools')">
+                                <div style="display: flex; gap: 0.5rem; justify-content: flex-start;">
+                                    <!-- Opens Google Images directly in new window - NO IFRAME -->
+                                    <button class="small-btn btn-popup" onclick="openGoogleImagesCollection()" style="background: #4285f4;">🔍 Search Google Images</button>
+                                    <button class="small-btn btn-popup" onclick="openGoogleImagesCollection('tools')" style="background: #34a853;">🛠️ Usage Rights</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+
+                        <!-- Right Column: Additional Images -->
+                        <div>
+                            <h4 style="margin-bottom: 1rem; color: #374151; font-size: 1rem; font-weight: 600;">📷 Additional Images</h4>
+                            
+                            <!-- Hero Background Controls -->
+                            <div class="input-group">
+                                <label>Hero Background</label>
+                                <div class="background-controls">
+                                    <div class="background-preview" id="backgroundPreview">
+                                        <img id="backgroundPreviewImg" src="" alt="Current Background" style="display: none;">
+                                        <div id="backgroundPreviewDefault">Default Background</div>
+                                    </div>
+                                    
+                                    <!-- Background Paste Area -->
+                                    <div id="backgroundPasteArea" class="background-paste-area"
+                                         onclick="focusBackgroundPasteArea()"
+                                         ondragover="handleBackgroundDragOver(event)"
+                                         ondrop="handleBackgroundDrop(event)">
+                                        <div class="paste-instructions">
+                                            <div class="paste-icon">🖼️</div>
+                                            <div class="paste-main" style="font-size: 14px;">Click here then Ctrl+V to paste background</div>
+                                            <div class="paste-sub" style="font-size: 11px;">Or drag & drop background image directly</div>
+                                        </div>
+                                        <textarea id="hiddenBackgroundPasteInput" class="hidden-input" placeholder="Paste background image here"></textarea>
+                                    </div>
+                                    
+                                    <div class="background-buttons">
+                                        <button class="small-btn btn-popup" onclick="document.getElementById('backgroundUpload').click()">🖼️ Upload Background</button>
+                                        <button class="small-btn btn-clear" onclick="resetToDefaultBackground()">🔄 Use Default</button>
+                                        <input type="file" id="backgroundUpload" accept="image/*" style="display: none;" onchange="handleBackgroundUpload(event)" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- File Upload -->
+                            <div class="input-group">
+                                <label>Upload GMB Images</label>
+                                <div class="file-upload" onclick="document.getElementById('imageUpload').click()">
+                                    <input type="file" id="imageUpload" accept="image/*" multiple />
+                                    📷 Upload Images
+                                </div>
+                            </div>
+
+                            <!-- Copy/Paste Area for GMB Images -->
+                            <div class="input-group">
+                                <label>Copy & Paste GMB Images</label>
+                                <div id="pasteArea" class="paste-area" 
+                                     onclick="focusPasteArea()"
+                                     ondragover="handleDragOver(event)"
+                                     ondrop="handleDrop(event)">
+                                    <div class="paste-instructions">
+                                        <div class="paste-icon">📷</div>
+                                        <div class="paste-main">Click here then Ctrl+V to paste</div>
+                                        <div class="paste-sub">Or drag & drop images directly</div>
+                                    </div>
+                                    <textarea id="hiddenPasteInput" class="hidden-input" placeholder="Paste images here"></textarea>
+                                </div>
+
+                                <div class="collection-controls">
+                                    <button class="small-btn btn-clear" onclick="clearAllImages()">🗑️ Clear All</button>
+                                    <button class="small-btn btn-download-all" onclick="downloadAllImages()">💾 Download All</button>
+                                </div>
+                            </div>
+                        </div>
                     
-                    <!-- File Upload -->
-                    <div class="input-group">
-                        <label>Upload GMB Images</label>
-                        <div class="file-upload" onclick="document.getElementById('imageUpload').click()">
-                            <input type="file" id="imageUpload" accept="image/*" multiple />
-                            📷 Upload Images
-                        </div>
                     </div>
 
-                    <!-- Copy/Paste Area for GMB Images -->
-                    <div class="input-group">
-                        <label>Copy & Paste GMB Images</label>
-                        <div id="pasteArea" class="paste-area" 
-                             onclick="focusPasteArea()"
-                             ondragover="handleDragOver(event)"
-                             ondrop="handleDrop(event)">
-                            <div class="paste-instructions">
-                                <div class="paste-icon">📷</div>
-                                <div class="paste-main">Click here then Ctrl+V to paste</div>
-                                <div class="paste-sub">Or drag & drop images directly</div>
-                            </div>
-                            <textarea id="hiddenPasteInput" class="hidden-input" placeholder="Paste images here"></textarea>
-                        </div>
-
-                        <div class="collection-controls">
-                            <button class="small-btn btn-clear" onclick="clearAllImages()">🗑️ Clear All</button>
-                            <button class="small-btn btn-download-all" onclick="downloadAllImages()">💾 Download All</button>
-                        </div>
-                    </div>
-
-                    <!-- Images Grid -->
-                    <div id="imageGrid" class="image-grid"></div>
+                    <!-- Images Grid (Full Width Below Both Columns) -->
+                    <div id="imageGrid" class="image-grid" style="margin-top: 1.5rem;"></div>
                 </div>
 
-                <!-- Templates -->
+                <!-- Actions -->
                 <div class="panel">
-                    <h3>🎨 Templates</h3>
-                    <div class="template-grid">
+                    <button class="btn btn-blue" onclick="downloadScreenshot()">
+                        📥 Download Screenshot
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <!-- Templates Selection -->
+                <div style="margin-bottom: 1.5rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; color: #374151; font-size: 1.125rem; font-weight: 600;">🎨 Templates</h3>
+                    <div class="template-grid-horizontal">
                         <button class="template-btn active" data-template="1">
                             <div class="template-name">Template 1</div>
                         </button>
@@ -752,16 +783,13 @@
                     </div>
                 </div>
 
-                <!-- Actions -->
-                <div class="panel">
-                    <button class="btn btn-blue" onclick="downloadScreenshot()">
+                <!-- Download Button -->
+                <div style="margin-bottom: 1.5rem; text-align: center;">
+                    <button class="btn btn-blue" onclick="downloadScreenshot()" style="max-width: 300px;">
                         📥 Download Screenshot
                     </button>
                 </div>
-            </div>
 
-            <!-- Preview Panel -->
-            <div class="preview-panel">
                 <h3>Website Preview</h3>
                 <div id="previewContainer" class="preview-container">
                     <!-- Template will be rendered here -->
